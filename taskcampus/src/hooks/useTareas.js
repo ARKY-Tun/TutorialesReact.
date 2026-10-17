@@ -6,6 +6,23 @@ import {
     deleteTarea,
 } from "../services/tareasService";
 
+const TAREAS_ACADEMICAS_RANDOM = [
+    "Preparar informe de laboratorio de React",
+    "Estudiar para el certamen de Base de Datos",
+    "Revisar apuntes de Algoritmos y Estructuras de Datos",
+    "Subir avance del proyecto a GitHub",
+    "Resolver guía de ejercicios de Cálculo II",
+    "Diseñar wireframes en Figma para interfaz de usuario",
+    "Practicar Hooks (useState, useEffect) y peticiones REST",
+    "Leer capítulo sobre concurrencia en Sistemas Operativos",
+    "Coordinar reunión con el escuadrón de desarrollo",
+    "Redactar informe de investigación sobre APIs simuladas",
+    "Configurar entorno de desarrollo con Vite y ESLint",
+    "Revisar rúbrica y criterios de evaluación del proyecto",
+    "Implementar validaciones en formularios controlados",
+    "Optimizar renderizado y estado derivado en la app",
+];
+
 const useTareas = () => {
     const [tareas, setTareas] = useState([]);
     const [cargando, setCargando] = useState(true);
@@ -18,11 +35,13 @@ const useTareas = () => {
         setError(null);
         try {
             const datos = await getTareas(10);
-            const tareasFormateadas = datos.map((t) => ({
+            // Orden aleatorio para asignar tareas académicas variadas a cada carga
+            const titulosMezclados = [...TAREAS_ACADEMICAS_RANDOM].sort(() => Math.random() - 0.5);
+            const tareasFormateadas = datos.map((t, index) => ({
                 id: t.id,          // Identificador único de interfaz (React key)
                 remoteId: t.id,    // Identificador del recurso en JSONPlaceholder (1..10)
                 esLocal: false,    // Recurso existente en la API
-                titulo: t.title,
+                titulo: titulosMezclados[index % titulosMezclados.length] || t.title,
                 completada: t.completed,
             }));
             setTareas(tareasFormateadas);
